@@ -1,26 +1,22 @@
 import streamlit as st
-
 import pandas as pd
 import numpy as np
 import altair as alt
-
 import joblib
 
-pipe_lr = joblib.load(open("model/text_emotion.pkl", "rb"))
+# Load the model from the specified path
+pipe_lr = joblib.load(open("emotion_model.pkl", "rb"))
 
 emotions_emoji_dict = {"anger": "😠", "disgust": "🤮", "fear": "😨😱", "happy": "🤗", "joy": "😂", "neutral": "😐", "sad": "😔",
                        "sadness": "😔", "shame": "😳", "surprise": "😮"}
-
 
 def predict_emotions(docx):
     results = pipe_lr.predict([docx])
     return results[0]
 
-
 def get_prediction_proba(docx):
     results = pipe_lr.predict_proba([docx])
     return results
-
 
 def main():
     st.title("Text Emotion Detection")
@@ -47,19 +43,12 @@ def main():
 
         with col2:
             st.success("Prediction Probability")
-            #st.write(probability)
             proba_df = pd.DataFrame(probability, columns=pipe_lr.classes_)
-            #st.write(proba_df.T)
             proba_df_clean = proba_df.T.reset_index()
             proba_df_clean.columns = ["emotions", "probability"]
 
             fig = alt.Chart(proba_df_clean).mark_bar().encode(x='emotions', y='probability', color='emotions')
             st.altair_chart(fig, use_container_width=True)
-
-
-
-
-
 
 if __name__ == '__main__':
     main()
