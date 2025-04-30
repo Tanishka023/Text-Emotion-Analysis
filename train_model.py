@@ -39,3 +39,20 @@ pipe.fit(X_train, y_train)
 joblib.dump(pipe, 'model/emotion_model.pkl')
 
 print("Model saved as model/emotion_model.pkl")
+
+# Function to predict emotion for custom text input
+def predict_emotion(text):
+    # Load the trained model
+    model = joblib.load('model/emotion_model.pkl')
+    
+    # Predict the emotion of the input text
+    prediction = model.predict([text])
+    
+    # Return the predicted emotion
+    return prediction[0]
+
+# Test the prediction function with custom input
+custom_text = input("Enter some text to predict its emotion: ")
+predicted_emotion = predict_emotion(custom_text)
+
+print(f"The predicted emotion for the text '{custom_text}' is: {predicted_emotion}")
