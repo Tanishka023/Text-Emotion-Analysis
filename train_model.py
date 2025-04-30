@@ -9,7 +9,9 @@ from sklearn.pipeline import Pipeline
 # Example Data: Replace with actual data
 data = {
     'text': [
-        "I am so happy today! "
+        "I am so happy today!, "I feel really sad", "This is terrifying", 
+        "Such a joyful moment", "I am disgusted", "I'm feeling neutral", 
+        "That was such a scary experience", "What a pleasant surprise"
     ],
     'emotion': ['happy', 'sad', 'fear', 'joy', 'disgust', 'neutral', 'fear', 'surprise']
 }
