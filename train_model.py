@@ -6,53 +6,88 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.linear_model import LogisticRegression
 from sklearn.pipeline import Pipeline
 
-# Example Data: Replace with actual data
+# ✅ Balanced & fixed dataset
 data = {
     'text': [
-        "I am so happy today!, "I feel really sad", "This is terrifying", 
-        "Such a joyful moment", "I am disgusted", "I'm feeling neutral", 
-        "That was such a scary experience", "What a pleasant surprise"
+        # Happy
+        "I am so happy today!",
+        "This made my day wonderful.",
+        "I'm feeling really good and cheerful.",
+        
+        # Sad
+        "I feel really sad.",
+        "My heart is heavy with sorrow.",
+        "I just want to cry all day.",
+        
+        # Fear
+        "This is terrifying.",
+        "I'm scared of what might happen.",
+        "That was such a scary experience.",
+        
+        # Joy
+        "Such a joyful moment.",
+        "I can't stop smiling from excitement.",
+        "Everything feels so light and joyful.",
+        
+        # Disgust
+        "I am disgusted.",
+        "That's absolutely revolting.",
+        "This makes me sick to my stomach.",
+        
+        # Neutral
+        "I'm feeling neutral.",
+        "Nothing much to say today.",
+        "It's just an average day.",
+        
+        # Surprise
+        "What a pleasant surprise!",
+        "I didn't see that coming at all.",
+        "That shocked me completely!"
     ],
-    'emotion': ['happy', 'sad', 'fear', 'joy', 'disgust', 'neutral', 'fear', 'surprise']
+    'emotion': [
+        'happy', 'happy', 'happy',
+        'sad', 'sad', 'sad',
+        'fear', 'fear', 'fear',
+        'joy', 'joy', 'joy',
+        'disgust', 'disgust', 'disgust',
+        'neutral', 'neutral', 'neutral',
+        'surprise', 'surprise', 'surprise'
+    ]
 }
 
-# Create a DataFrame
+# Create DataFrame
 df = pd.DataFrame(data)
 
-# Split the data into features and labels
+# Split into features and labels
 X = df['text']
 y = df['emotion']
 
-# Split the dataset into training and testing sets
+# Train-test split
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
 
-# Create a pipeline with a TfidfVectorizer and Logistic Regression model
+# Create pipeline
 pipe = Pipeline([
     ('tfidf', TfidfVectorizer()),
-    ('lr', LogisticRegression())
+    ('lr', LogisticRegression(max_iter=200))
 ])
 
 # Train the model
 pipe.fit(X_train, y_train)
 
-# Save the trained model to a .pkl file
+# Save the model
 joblib.dump(pipe, 'model/emotion_model.pkl')
+print("✅ Model saved as model/emotion_model.pkl")
 
-print("Model saved as model/emotion_model.pkl")
-
-# Function to predict emotion for custom text input
+# -------------------------
+# 🔍 Predict custom input
+# -------------------------
 def predict_emotion(text):
-    # Load the trained model
     model = joblib.load('model/emotion_model.pkl')
-    
-    # Predict the emotion of the input text
     prediction = model.predict([text])
-    
-    # Return the predicted emotion
     return prediction[0]
 
-# Test the prediction function with custom input
-custom_text = input("Enter some text to predict its emotion: ")
+# Get input from user
+custom_text = input("\nEnter some text to predict its emotion: ")
 predicted_emotion = predict_emotion(custom_text)
 
-print(f"The predicted emotion for the text '{custom_text}' is: {predicted_emotion}")
+print(f"\n🔮 The predicted emotion for the text '{custom_text}' is: {predicted_emotion}")
